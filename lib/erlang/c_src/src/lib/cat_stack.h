@@ -16,25 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dianping.cat;
 
-import java.text.MessageFormat;
-import java.text.ParseException;
+#ifndef CCAT_CAT_STACK_H
+#define CCAT_CAT_STACK_H
 
-import org.junit.Test;
+#include <stdlib.h>
 
-public class MessageFomatTest {
+#define CAT_STACK_PUSH_SUCCESS 0
 
-	@Test
-	public void test() {
-		String str = "/topic/s_c_2_0_r0123123123/123123123";
-		MessageFormat format = new MessageFormat("/topic/{0}");
+typedef struct _stack CatStack;
 
-		try {
-			format.parse(str);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+struct _stack {
+    void* (*peek)(CatStack *s);
+    int (*size)(CatStack *s);
+    int (*capacity)(CatStack *s);
+    int (*push)(CatStack *s, void* data);
+    void* (*pop)(CatStack *s);
+};
 
-	}
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+CatStack *newCatStack(int capacity);
+
+void deleteCatStack(CatStack *stack);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif //CCAT_CAT_STACK_H
+
